@@ -1,0 +1,96 @@
+Yii 是一个 高性能 的，适用于开发 WEB 2.0 应用的 PHP 框架
+全栈框架 Yii 2.0 在 PHP 5.4.0 版本以上完全重写了 Yii
+
+http://localhost/basic/web/index.php?r=site%2Findex
+http://localhost/basic/web/index.php?r=site/index
+
+
+views/layouts:自定义公共模板(布局文件)
+header
+     <?php echo $content; ?>
+footer
+
+模板渲染:
+$this->render();  加载layout模板
+$this->renderPartial()  不加载layout模板
+
+return $this->render("index");
+先调用layouts下定义的模板,然后把$content变量替换成render里面对应的参数模板
+return $this->renderPartial()：加载部分模板(不加载layout模板)
+
+
+必须会:
+ob_start();
+
+
+
+yii获取参数
+Yii::$app->request->get();
+Yii::$app->request->get("id");
+Yii::$app->request->get("id",1);
+
+//反向控制,依赖注入 设计思想
+
+
+<?php $form = ActiveForm::begin()的作用:
+自动生成form表单<from action="" method="post">  默认提交方式为post
+ <form id="login-form" class="form-horizontal" action="/Yii/basic/web/index.php?r=site%2Flogin" 
+method="post" role="form">
+<input type="hidden" name="_csrf" value="YlJ5SGkzZG0NChM6G0kgBhtjPCZEfCo0OjADEAN0CVUwPUwQWlBRHQ==">
+
+生成输入框
+<?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+
+ActiveRecode 连接数据表
+Model表单模型 收集数据做验证
+
+union 合并两张表
+
+\web\.htaccess文件使用(重写规则RewriteRule)：必须是apache服务器 且必须放在和入口文件index.php同级才可以在url
+请求的时候省略入口文件index.php 
+
+伪静态(url看起来是静态页面，实际上是动态的)：'suffix' => '.json',
+
+登录机制：web.php中的components配置
+
+header() 函数向客户端发送原始的 HTTP 报头。
+php中的header("Location:http://www.baidu.com");
+window.location.href="http://www.baidu.com";
+
+补充：
+javascript中的location.href有很多种用法，主要如下：
+self.location.href="/url" 当前页面打开URL页面
+location.href="/url" 当前页面打开URL页面
+windows.location.href="/url" 当前页面打开URL页面，前面三个用法相同。
+this.location.href="/url" 当前页面打开URL页面
+parent.location.href="/url" 在父页面打开新页面
+top.location.href="/url" 在顶层页面打开新页面
+
+
+控制器中记住beforeAction()  通过beforeAction()请求可以获取到当前访问的控制器/方法的属性
+模型中记住beforeSave()  公共功能 修改密码的例子 AR类的beforeSave方法是AR对象在保存之前进行要执行的动作，我们
+可以在里面进行赋值操作，校验操作等等，但是它有返回值，当返回true的时候才会进行保存，否则不保存对象
+
+public function beforeSave(){
+
+    //修改密码的例子
+    if(!empty($this->password))
+    $this->password = md5($this->password);
+    else
+    unset($this->password);
+
+    return parent::beforeSave();
+
+}
+
+
+文件缓存(FileCacfhe)：用于生成静态页面
+ob_start()框架模板加载机制： 
+    ob_start(), ob_end_flush(), ob_get_content(),
+    其中ob_start()是打开浏览器缓冲区的意思，打开缓冲后，所有来自PHP程序的非文件头信息均不会发送，
+    而是保存在内部缓冲区，直到你使用了ob_end_flush().
+    而这里最重要的一个函数，就是ob_get_contents(),这个函数的作用是获取缓冲区的内容，
+
+getIsPost()  isPost   //判断是否是Post请求
+Yii::$app->request->getIsAjax()  //判断是否是Ajax请求
+
